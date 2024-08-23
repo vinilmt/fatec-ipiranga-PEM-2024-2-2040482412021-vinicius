@@ -60,7 +60,7 @@ int requestRatesAmount()
     while (ratesAmount == 1 || ratesAmount == 2)
     {
         clearInputBuffer();
-        
+
         printf("O número de notas deve ser maior que 2.\n");
         printf("Informe o número de notas: ");
         scanf("%d", &ratesAmount);
@@ -92,7 +92,9 @@ void removeMinMaxRates(float *rates, int ratesAmount)
 {
     float minRate = rates[0];
     int minRateIndex = 0;
-    float maxRate = -1.0; // Esse valor garante que não terão o mesmo indexador desde o início
+
+    // Esse valores garantem que não terão o mesmo indexador desde o início
+    float maxRate = -1.0;
     int maxRateIndex = -1;
 
     int i;
@@ -105,8 +107,8 @@ void removeMinMaxRates(float *rates, int ratesAmount)
         }
     }
 
-    // Dois loops, para ser uma iteração que ignora o o indexador da menor nota
-    // Isso garante que não adquirir o mesmo indexador
+    // Dois loops, para iterações que ignoram o indexador de menor nota
+    // Isso garante que não irá adquirir o mesmo indexador
     for (i = 0; i < minRateIndex; i++)
     {
         if (rates[i] > maxRate)
@@ -140,7 +142,7 @@ float evaluateCentralRate(float *rates, int ratesAmount)
     return sum;
 }
 
-// Limpeza do buffer global de entradas (para impedir que o excesso interfirá no próximo scanf)
+// Limpeza do buffer global de entradas (para impedir o excesso de interferir no próximo scanf)
 void clearInputBuffer() {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
