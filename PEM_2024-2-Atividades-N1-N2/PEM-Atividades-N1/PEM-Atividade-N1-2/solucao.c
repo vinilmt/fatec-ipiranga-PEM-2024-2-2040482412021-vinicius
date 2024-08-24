@@ -1,10 +1,10 @@
 /*--------------------------------------------------------*
- * Disciplina: Programaçao Estruturada e Modular *
- *          Prof. Carlos Veríssimo                                    *
+ * Disciplina: Programaçao Estruturada e Modular          *
+ *          Prof. Carlos Veríssimo                        *
  *--------------------------------------------------------*
  * Objetivo do Programa: Praticando acesso a vetores      *
- * Data - 23/08/2024                                               *
- * Autor: Vinicius Leon Melo Tavares*
+ * Data - 23/08/2024                                      *
+ * Autor: Vinicius Leon Melo Tavares                      *
  *--------------------------------------------------------*/
 
 #include <stdio.h>
