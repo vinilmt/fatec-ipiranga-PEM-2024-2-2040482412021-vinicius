@@ -1,3 +1,12 @@
+/*--------------------------------------------------------*
+ * Disciplina: Programaçao Estruturada e Modular *
+ *          Prof. Carlos Veríssimo                                    *
+ *--------------------------------------------------------*
+ * Objetivo do Programa: Praticando acesso a vetores      *
+ * Data - 23/08/2024                                               *
+ * Autor: Vinicius Leon Melo Tavares*
+ *--------------------------------------------------------*/
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -143,7 +152,9 @@ float evaluateCentralRate(float *rates, int ratesAmount)
 }
 
 // Limpeza do buffer global de entradas (para impedir o excesso de interferir no próximo scanf)
-void clearInputBuffer() {
+void clearInputBuffer()
+{
     int c;
-    while ((c = getchar()) != '\n' && c != EOF);
+    while ((c = getchar()) != '\n' && c != EOF)
+        ;
 }
