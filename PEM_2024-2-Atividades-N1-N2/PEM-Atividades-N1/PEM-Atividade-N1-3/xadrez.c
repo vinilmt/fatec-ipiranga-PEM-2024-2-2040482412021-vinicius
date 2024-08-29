@@ -15,7 +15,7 @@
 #define WHITE "[1;97m" // Cor para peças brancas
 #define BLACK "[1;38;5;16m" // Cor para peças pretas
 #define NEUTRAL "[1;36m" // Cor para espaço vazio
-#define BACKGROUND_LIGHT "[48;5;127m" // Cor de fundo primária
+#define BACKGROUND_LIGHT "[48;5;163m" // Cor de fundo primária
 #define BACKGROUND_DARK "[48;5;57m" // Cor de fundo secundária
 #define RESET "[0m" // Resetar todos os atributos ANSI para o padrão
 
