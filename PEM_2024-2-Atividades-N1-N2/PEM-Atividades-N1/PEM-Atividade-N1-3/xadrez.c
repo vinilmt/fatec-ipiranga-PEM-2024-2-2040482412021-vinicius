@@ -1,33 +1,42 @@
 /*--------------------------------------------------------*
-
-* Disciplina: Programaçao Estruturada e Modular          *
-*          Prof. Carlos Veríssimo                        *
-*--------------------------------------------------------*
-* Objetivo do Programa: Montar Tabuleiro de Xadrez       *
-* Data - 30/08/2024                                      *
-* Autor: Vinicius Leon Melo Tavares                      *
-*--------------------------------------------------------*/
+ * Disciplina: Programaçao Estruturada e Modular          *
+ *          Prof. Carlos Veríssimo                        *
+ *--------------------------------------------------------*
+ * Objetivo do Programa: Montar Tabuleiro de Xadrez       *
+ * Data - 30/08/2024                                      *
+ * Autor: Vinicius Leon Melo Tavares                      *
+ *--------------------------------------------------------*/
  
 #include <stdio.h>
 
-#define DIM 8
+#define DIM 8 // Dimensão do tabuleiro
 
+#define ESC "\033" // ANSI Escape 
+#define WHITE "[1;97m" // Cor para peças brancas
+#define BLACK "[1;38;5;16m" // Cor para peças pretas
+#define NEUTRAL "[1;36m" // Cor para espaço vazio
+#define BACKGROUND_LIGHT "[48;5;127m" // Cor de fundo primária
+#define BACKGROUND_DARK "[48;5;57m" // Cor de fundo secundária
+#define RESET "[0m" // Resetar todos os atributos ANSI para o padrão
+
+// Cada estado do enum está associado a um valor númerico, a partir de 0
 typedef enum {
-    X, // Vázio
+    X, // Vazio
     BT1, BC2, BB3, BD , BR , BB6, BC7, BT8, // Peças brancas
     BP1, BP2, BP3, BP4, BP5, BP6, BP7, BP8, // Peões brancos
     PT1, PC2, PB3, PD , PR , PB6, PC7, PT8, // Peças pretas
     PP1, PP2, PP3, PP4, PP5, PP6, PP7, PP8, // Peões pretos
-    TOTAL_PIECE_KINDS
+    TOTAL_PIECE_KINDS // Esse estado extra corresponde ao total de estados (exceto este)
 } PIECE;
+
+// Representação ANSI de cada peça, acessada através de índice (o valor associado aos estados do enum)
 const char* PIECE_DISPLAY_ANSI[TOTAL_PIECE_KINDS] = {
-    "\033[1;36m X ",
-    "\033[1;97mBt1", "\033[1;97mBc2", "\033[1;97mBb3", "\033[1;97mBd ", "\033[1;97mBr ", "\033[1;97mBb6", "\033[1;97mBc7", "\033[1;97mBt8",
-    "\033[1;97mBp1", "\033[1;97mBp2", "\033[1;97mBp3", "\033[1;97mBp4", "\033[1;97mBp5", "\033[1;97mBp6", "\033[1;97mBp7", "\033[1;97mBp8",
-    "\033[1;38;5;16mPt1", "\033[1;38;5;16mPc2", "\033[1;38;5;16mPb3", "\033[1;38;5;16mPd ", "\033[1;38;5;16mPr ", "\033[1;38;5;16mPb6", "\033[1;38;5;16mPc7", "\033[1;38;5;16mPt8",
-    "\033[1;38;5;16mPp1", "\033[1;38;5;16mPp2", "\033[1;38;5;16mPp3", "\033[1;38;5;16mPp4", "\033[1;38;5;16mPp5", "\033[1;38;5;16mPp6", "\033[1;38;5;16mPp7", "\033[1;38;5;16mPp8",
+    ESC NEUTRAL " X ",
+    ESC WHITE "Bt1", ESC WHITE "Bc2", ESC WHITE "Bb3", ESC WHITE "Bd ", ESC WHITE "Br ", ESC WHITE "Bb6", ESC WHITE "Bc7", ESC WHITE "Bt8",
+    ESC WHITE "Bp1", ESC WHITE "Bp2", ESC WHITE "Bp3", ESC WHITE "Bp4", ESC WHITE "Bp5", ESC WHITE "Bp6", ESC WHITE "Bp7", ESC WHITE "Bp8",
+    ESC BLACK "Pt1", ESC BLACK "Pc2", ESC BLACK "Pb3", ESC BLACK "Pd ", ESC BLACK "Pr ", ESC BLACK "Pb6", ESC BLACK "Pc7", ESC BLACK "Pt8",
+    ESC BLACK "Pp1", ESC BLACK "Pp2", ESC BLACK "Pp3", ESC BLACK "Pp4", ESC BLACK "Pp5", ESC BLACK "Pp6", ESC BLACK "Pp7", ESC BLACK "Pp8",
 };
- 
  
 int main() {
     PIECE board[DIM * DIM] = {
@@ -41,37 +50,29 @@ int main() {
         BT1, BC2, BB3, BD , BR , BB6, BC7, BT8,
     };
  
+    char* bg_1;
+    char* bg_2;
+
     printf("   .................................................\n");
     for (int i = 0; i < DIM; i++) {
-        int j;
-
+        // Inverte a ordem das cores de fundo a cada linha
+        if (i % 2 == 0) {
+            bg_1 = BACKGROUND_LIGHT;
+            bg_2 = BACKGROUND_DARK;
+        } else {
+            bg_1 = BACKGROUND_DARK;
+            bg_2 = BACKGROUND_LIGHT;
+        }
+    
         printf(" %d |", i + 1);
-        for (j = 0; j < DIM; j++) {
-            printf("\033[48;5;247m %s \033[0m|", PIECE_DISPLAY_ANSI[board[i * DIM + j]]);
-            j++;
-            printf("\033[48;5;61m %s \033[0m|", PIECE_DISPLAY_ANSI[board[i * DIM + j]]);
+        for (int j = 0; j < DIM; j++) {
+            char* bg = (j % 2 == 0) ? bg_1 : bg_2; // Alterna a cor de fundo a cada espaço
+            printf(ESC "%s %s " ESC RESET "|", bg, PIECE_DISPLAY_ANSI[board[i * DIM + j]]);
         }
         printf("\n   |");
-        for (j = 0; j < DIM; j++) {
-            printf("\033[1;48;5;247m     \033[0m|");
-            j++;
-            printf("\033[1;48;5;61m     \033[0m|");
-        }
-        printf("\n   |.....|.....|.....|.....|.....|.....|.....|.....|\n");
-
-        i++;
-
-        printf(" %d |", i + 1);
-        for (j = 0; j < DIM; j++) {
-            printf("\033[1;48;5;61m %s \033[0m|", PIECE_DISPLAY_ANSI[board[i * DIM + j]]);
-            j++;
-            printf("\033[1;48;5;247m %s \033[0m|", PIECE_DISPLAY_ANSI[board[i * DIM + j]]);
-        }
-        printf("\n   |");
-        for (j = 0; j < DIM; j++) {
-            printf("\033[1;48;5;61m     \033[0m|");
-            j++;
-            printf("\033[1;48;5;247m     \033[0m|");
+        for (int j = 0; j < DIM; j++) {
+            char* bg = (j % 2 == 0) ? bg_1 : bg_2; // Alterna a cor de fundo a cada espaço
+            printf(ESC "%s     " ESC RESET "|", bg);
         }
         printf("\n   |.....|.....|.....|.....|.....|.....|.....|.....|\n");
     }
