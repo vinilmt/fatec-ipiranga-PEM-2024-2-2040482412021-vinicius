@@ -62,7 +62,7 @@ int main() {
         BT1, BC1, BB1, BD1, BR1, BB2, BC2, BT2,
     };
     
-    printf("   Início da Partida\n");
+    printf(NEUTRAL "   Início da Partida\n" RESET);
     displayBoard(board);
     printf("\n");
 
