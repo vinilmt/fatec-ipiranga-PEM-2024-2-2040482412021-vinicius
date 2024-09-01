@@ -62,7 +62,7 @@ int main() {
         BT1, BC1, BB1, BD1, BR1, BB2, BC2, BT2,
     };
     
-    printf(NEUTRAL "   Início da Partida\n" RESET);
+    printf(NEUTRAL "\n              INÍCIO DA PARTIDA\n\n" RESET);
     displayBoard(board);
     printf("\n");
 
@@ -89,7 +89,7 @@ int main() {
             formerWhiteFrom = from.value;
             whiteMoveTo(board, from.value, to.value);
             printf(
-                NEUTRAL "\n                  JOGADA #%d           \n\n   %s\n" RESET,
+                NEUTRAL "\n                  JOGADA #%d\n\n   %s\n" RESET,
                 i / 2 + 1,
                 labels[i]
             );
