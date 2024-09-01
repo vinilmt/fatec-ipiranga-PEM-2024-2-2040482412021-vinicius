@@ -13,6 +13,7 @@
 
 #define WHITE "\e[1;97m" // Cor para peças brancas
 #define BLACK "\e[1;38;5;16m" // Cor para peças pretas
+#define NEUTRAL "\e[1;33m" // Cor para legendas
 #define BACKGROUND_LIGHT "\e[48;5;163m" // Cor de fundo primária
 #define BACKGROUND_DARK "\e[48;5;57m" // Cor de fundo secundária
 #define RESET "\e[0m" // Resetar todos os atributos ANSI para o padrão
@@ -83,15 +84,14 @@ int main() {
         ResultInt from = convertCoordinatesToIndex(fromSequence[i]);
         ResultInt to = convertCoordinatesToIndex(toSequence[i]);
         if (i % 2 == 0) {
-            printf("\n                  JOGADA #%d           \n\n", i / 2 + 1);
             formerWhiteFrom = from.value;
             whiteMoveTo(board, from.value, to.value);
-            printf("   %s\n", labels[i]);
+            printf(NEUTRAL "\n                  JOGADA #%d           \n\n   %s\n" RESET, i / 2 + 1, labels[i]);
             displayBoard(board);
             printf("\n");
         } else {
             blackMoveTo(board, from.value, to.value);
-            printf("   %s\n", labels[i]);
+            printf(NEUTRAL "   %s\n" RESET, labels[i]);
             displayBoard(board);
             printf("\n");
 
@@ -117,7 +117,7 @@ void displayBoard(PIECE* board) {
             bg_2 = BACKGROUND_LIGHT;
         }
     
-        printf(" %d ", 8 - i);
+        printf(NEUTRAL " %d " RESET, 8 - i);
         for (int j = 0; j < DIM; j++) {
             char* bg = (j % 2 == 0) ? bg_1 : bg_2; // Alterna a cor de fundo a cada espaço
             printf("%s %s " RESET, bg, PIECE_DISPLAY_ANSI[board[i * DIM + j]]);
@@ -129,7 +129,7 @@ void displayBoard(PIECE* board) {
         }
         printf("\n");
     }
-    printf("     A    B    C    D    E    F    G    H\n");
+    printf(NEUTRAL "     A    B    C    D    E    F    G    H\n" RESET);
 }
 
 ResultInt convertCoordinatesToIndex(char* coord) {
