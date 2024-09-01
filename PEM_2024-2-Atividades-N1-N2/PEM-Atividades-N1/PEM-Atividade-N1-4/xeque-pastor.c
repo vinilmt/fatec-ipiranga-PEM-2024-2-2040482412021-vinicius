@@ -11,12 +11,11 @@
 
 #define DIM 8 // Dimensão do tabuleiro
 
-#define ESC "\033" // ANSI Escape 
-#define WHITE "[1;97m" // Cor para peças brancas
-#define BLACK "[1;38;5;16m" // Cor para peças pretas
-#define BACKGROUND_LIGHT "[48;5;163m" // Cor de fundo primária
-#define BACKGROUND_DARK "[48;5;57m" // Cor de fundo secundária
-#define RESET "[0m" // Resetar todos os atributos ANSI para o padrão
+#define WHITE "\e[1;97m" // Cor para peças brancas
+#define BLACK "\e[1;38;5;16m" // Cor para peças pretas
+#define BACKGROUND_LIGHT "\e[48;5;163m" // Cor de fundo primária
+#define BACKGROUND_DARK "\e[48;5;57m" // Cor de fundo secundária
+#define RESET "\e[0m" // Resetar todos os atributos ANSI para o padrão
 
 // Cada estado do enum está associado a um valor númerico, a partir de 0
 typedef enum {
@@ -29,24 +28,25 @@ typedef enum {
     PP1, PP2, PP3, PP4, PP5, PP6, PP7, PP8, // Peões pretos
     TOTAL_PIECE_KINDS // Esse estado extra corresponde ao total de estados (exceto este)
 } PIECE;
-typedef enum { OK, ERR } STATUS; // É usado quando a função pode falhar
+typedef enum { OK, ERR } STATUS; // A função retorna isso quando pode falhar
 
 typedef struct { int value; STATUS status; } ResultInt; // Quando retorna um valor inteiro mas pode falhar
 
 // Representação ANSI de cada peça, acessada através de índice (o valor associado aos estados do enum)
 const char* PIECE_DISPLAY_ANSI[TOTAL_PIECE_KINDS] = {
     "   ",
-    ESC WHITE "...",
-    ESC BLACK "...",
-    ESC WHITE "Bt1", ESC WHITE "Bc1", ESC WHITE "Bb1", ESC WHITE "Bd1", ESC WHITE "Br1", ESC WHITE "Bb2", ESC WHITE "Bc2", ESC WHITE "Bt2",
-    ESC WHITE "Bp1", ESC WHITE "Bp2", ESC WHITE "Bp3", ESC WHITE "Bp4", ESC WHITE "Bp5", ESC WHITE "Bp6", ESC WHITE "Bp7", ESC WHITE "Bp8",
-    ESC BLACK "Pt1", ESC BLACK "Pc1", ESC BLACK "Pb1", ESC BLACK "Pd1", ESC BLACK "Pr1", ESC BLACK "Pb2", ESC BLACK "Pc2", ESC BLACK "Pt2",
-    ESC BLACK "Pp1", ESC BLACK "Pp2", ESC BLACK "Pp3", ESC BLACK "Pp4", ESC BLACK "Pp5", ESC BLACK "Pp6", ESC BLACK "Pp7", ESC BLACK "Pp8",
+    WHITE "...",
+    BLACK "...",
+    WHITE "Bt1", WHITE "Bc1", WHITE "Bb1", WHITE "Bd1", WHITE "Br1", WHITE "Bb2", WHITE "Bc2", WHITE "Bt2",
+    WHITE "Bp1", WHITE "Bp2", WHITE "Bp3", WHITE "Bp4", WHITE "Bp5", WHITE "Bp6", WHITE "Bp7", WHITE "Bp8",
+    BLACK "Pt1", BLACK "Pc1", BLACK "Pb1", BLACK "Pd1", BLACK "Pr1", BLACK "Pb2", BLACK "Pc2", BLACK "Pt2",
+    BLACK "Pp1", BLACK "Pp2", BLACK "Pp3", BLACK "Pp4", BLACK "Pp5", BLACK "Pp6", BLACK "Pp7", BLACK "Pp8",
 };
 
 void displayBoard(PIECE* board);
 ResultInt convertCoordinatesToIndex(char* coord);
-void moveTo(PIECE* board, int from, int to);
+void whiteMoveTo(PIECE* board, int from, int to);
+void blackMoveTo(PIECE* board, int from, int to);
 void clearPosition(PIECE* board, int index);
 
 int main() {
@@ -120,12 +120,12 @@ void displayBoard(PIECE* board) {
         printf(" %d ", 8 - i);
         for (int j = 0; j < DIM; j++) {
             char* bg = (j % 2 == 0) ? bg_1 : bg_2; // Alterna a cor de fundo a cada espaço
-            printf(ESC "%s %s " ESC RESET, bg, PIECE_DISPLAY_ANSI[board[i * DIM + j]]);
+            printf("%s %s " RESET, bg, PIECE_DISPLAY_ANSI[board[i * DIM + j]]);
         }
         printf("\n   ");
         for (int j = 0; j < DIM; j++) {
             char* bg = (j % 2 == 0) ? bg_1 : bg_2; // Alterna a cor de fundo a cada espaço
-            printf(ESC "%s     " ESC RESET, bg);
+            printf("%s     " RESET, bg);
         }
         printf("\n");
     }
@@ -147,7 +147,6 @@ ResultInt convertCoordinatesToIndex(char* coord) {
         case 'g': X = 6; break;
         case 'h': X = 7; break;
         default:
-            result.value = -1;
             result.status = ERR;
             return result;
     }
@@ -161,7 +160,6 @@ ResultInt convertCoordinatesToIndex(char* coord) {
         case '7': Y = 1; break;
         case '8': Y = 0; break;
         default:
-            result.value = -1;
             result.status = ERR;
             return result;
     }
