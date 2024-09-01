@@ -78,6 +78,8 @@ int main() {
         "Brancas capturam Peão, Xeque Mate: Dxf7#"
     };
 
+    // Como os rastros são limpos apenas após a jogada de ambos
+    // é necessário guardar o índice do rastro da peça branca
     int formerWhiteFrom;
 
     for (int i = 0; i < 7; i++) {
@@ -86,7 +88,11 @@ int main() {
         if (i % 2 == 0) {
             formerWhiteFrom = from.value;
             whiteMoveTo(board, from.value, to.value);
-            printf(NEUTRAL "\n                  JOGADA #%d           \n\n   %s\n" RESET, i / 2 + 1, labels[i]);
+            printf(
+                NEUTRAL "\n                  JOGADA #%d           \n\n   %s\n" RESET,
+                i / 2 + 1,
+                labels[i]
+            );
             displayBoard(board);
             printf("\n");
         } else {
