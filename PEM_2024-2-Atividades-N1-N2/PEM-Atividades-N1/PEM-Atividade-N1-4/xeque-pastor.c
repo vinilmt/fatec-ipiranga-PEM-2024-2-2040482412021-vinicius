@@ -14,8 +14,8 @@
 #define WHITE "\e[1;97m" // Cor para peças brancas
 #define BLACK "\e[1;38;5;16m" // Cor para peças pretas
 #define NEUTRAL "\e[1;33m" // Cor para legendas
-#define BACKGROUND_LIGHT "\e[48;5;163m" // Cor de fundo primária
-#define BACKGROUND_DARK "\e[48;5;57m" // Cor de fundo secundária
+#define BACKGROUND_LIGHT "\e[105m" // Cor de fundo primária
+#define BACKGROUND_DARK "\e[45m" // Cor de fundo secundária
 #define RESET "\e[0m" // Resetar todos os atributos ANSI para o padrão
 
 // Cada estado do enum está associado a um valor númerico, a partir de 0
@@ -180,8 +180,6 @@ void whiteMoveTo(PIECE* board, int from, int to) {
     PIECE piece = board[from];
     board[from] = WHITE_TRAIL;
     board[to] = piece;
-
-    return OK;
 }
 
 void blackMoveTo(PIECE* board, int from, int to) {
@@ -189,8 +187,6 @@ void blackMoveTo(PIECE* board, int from, int to) {
     PIECE piece = board[from];
     board[from] = BLACK_TRAIL;
     board[to] = piece;
-
-    return OK;
 }
 
 void clearPosition(PIECE* board, int index) {
