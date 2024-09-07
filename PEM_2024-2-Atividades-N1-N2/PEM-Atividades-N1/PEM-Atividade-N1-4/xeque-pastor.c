@@ -8,7 +8,6 @@
  *-------------------------------------------------------------*/
  
 #include <stdio.h>
-#include <stdbool.h>
 
 #define DIM 8 // Dimensão do tabuleiro
 
