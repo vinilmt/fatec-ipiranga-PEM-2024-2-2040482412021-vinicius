@@ -2,7 +2,7 @@
  * Disciplina: Programaçao Estruturada e Modular               *
  *          Prof. Carlos Veríssimo                             *
  *-------------------------------------------------------------*
- * Objetivo do Programa: Implementação da Jogada xeque Pastor  *
+ * Objetivo do Programa: Implementação da Jogada Xeque Pastor  *
  * Data - 06/09/2024                                           *
  * Autor: Vinicius Leon Melo Tavares                           *
  *-------------------------------------------------------------*/
@@ -100,15 +100,13 @@ Status deducePositionFromRaw(char rawX, char rawY, int* column, int* row) {
 void movePiece(Slot board[][DIM], int originColumn, int originRow, int destinationColumn, int destinationRow, Color color) {
     // Deve existir estes índices dentro de board, senão comportamento indefinido
 
-    Slot piece = board[originRow][originColumn];
+    board[destinationRow][destinationColumn] = board[originRow][originColumn];
     
     if (color == White) {
         board[originRow][originColumn] = WhiteTrail;
     } else {
         board[originRow][originColumn] = BlackTrail;
     }
-
-    board[destinationRow][destinationColumn] = piece;
 }
 
 void clearPosition(Slot board[][DIM], int column, int row) {
@@ -134,10 +132,10 @@ int main() {
     printf("\n");
 
     typedef struct {
-        int rawOriginX;
-        int rawOriginY;
-        int rawDestinationX;
-        int rawDestinationY;
+        char rawOriginX;
+        char rawOriginY;
+        char rawDestinationX;
+        char rawDestinationY;
         char* label;
     } Step;
 
