@@ -146,7 +146,7 @@ int main() {
         {'b', '8', 'c', '6', "Pretas jogam Cc6"},
         {'d', '1', 'h', '5', "Brancas jogam Dh5"},
         {'g', '8', 'f', '6', "Pretas jogam Cf6"},
-        {'h', '5', 'f', '7', "Brancas capturam Peão, xeque Mate: Dxf7#"},
+        {'h', '5', 'f', '7', "Brancas capturam Peão, Xeque Mate: Dxf7#"},
     };
 
     for (int i = 0; i < sizeof(steps) / sizeof(Step); i++) {

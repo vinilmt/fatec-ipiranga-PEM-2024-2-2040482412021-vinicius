@@ -11,14 +11,14 @@
 #define DIM 8
 
 typedef struct {
-	int origemI;
-	int origemJ;
-	int destinoI;
-	int destinoJ;
-	char* rotulo;
+    int origemI;
+    int origemJ;
+    int destinoI;
+    int destinoJ;
+    char *rotulo;
 } Passo;
 const Passo passos[] = {
-	{6, 4, 4, 4, "Após jogada #1 das Brancas (Peão do Rei e2 para e4)"},
+    {6, 4, 4, 4, "Após jogada #1 das Brancas (Peão do Rei e2 para e4)"},
     {1, 4, 3, 4, "Após jogada #1 das Pretas (Peão do Rei e7 para e5)"},
     {7, 5, 4, 2, "Após jogada #2 das Brancas (Bispo do Rei f1 para c4)"},
     {0, 1, 2, 2, "Após jogada #2 das Pretas (Cavalo da Dama b8 para c6)"},
@@ -28,23 +28,23 @@ const Passo passos[] = {
 };
 
 void imprimirTabuleiro(char vetor[DIM][DIM]) {
-	for (int i = 0; i < DIM; i++) {
+    for (int i = 0; i < DIM; i++) {
         for (int j = 0; j < DIM; j++) {
             printf("%c ", vetor[i][j]);
         }
         printf("\n");
     }
-	printf("\n");
+    printf("\n");
 }
 
 void moverPeca(char vetor[DIM][DIM], int origemI, int origemJ, int destinoI, int destinoJ) {
-	vetor[destinoI][destinoJ] = vetor[origemI][origemJ];
-	vetor[origemI][origemJ] = '.';
+    vetor[destinoI][destinoJ] = vetor[origemI][origemJ];
+    vetor[origemI][origemJ] = '.';
 }
 
 int main() {
-	// tabuleiro com as peças na posição inicial
-	char vetor[DIM][DIM] = {
+    // tabuleiro com as peças na posição inicial
+    char vetor[DIM][DIM] = {
         {'t', 'c', 'b', 'd', 'r', 'b', 'c', 't'},
         {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
         {'.', '.', '.', '.', '.', '.', '.', '.'},
@@ -52,17 +52,16 @@ int main() {
         {'.', '.', '.', '.', '.', '.', '.', '.'},
         {'.', '.', '.', '.', '.', '.', '.', '.'},
         {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
-        {'T', 'C', 'B', 'D', 'R', 'B', 'C', 'T'}
-    };
+        {'T', 'C', 'B', 'D', 'R', 'B', 'C', 'T'}};
 
-	printf("Tabuleiro inicial:\n");
+    printf("Tabuleiro inicial:\n");
     imprimirTabuleiro(vetor);
-  
+
     for (int i = 0; i < sizeof(passos) / sizeof(Passo); i++) {
         moverPeca(vetor, passos[i].origemI, passos[i].origemJ, passos[i].destinoI, passos[i].destinoJ);
         printf("%s:\n", passos[i].rotulo);
         imprimirTabuleiro(vetor);
     }
 
-	return 0;
+    return 0;
 }
