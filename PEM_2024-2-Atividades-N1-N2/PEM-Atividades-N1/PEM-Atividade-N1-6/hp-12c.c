@@ -32,14 +32,16 @@ int stackPush(Stack* stack, int value) {
     return 0;
 }
 
-// Retorna o último valor da pilha (ou apenas 0 se não há)
-int stackPop(Stack* stack) {
+// Retorna 0 se suceder, 1 se não houver nenhum valor na pilha
+int stackPop(Stack* stack, int* target) {
     if (stack->len <= 0) {
-        return 0;
+        return 1;
     }
 
     stack->len--;
-    return stack->inner[stack->len];
+    *target = stack->inner[stack->len];
+
+    return 0;
 }
 
 // Retorna 0 se suceder e 1 se falhar
@@ -75,26 +77,29 @@ int evaluateToken(Stack* stack, char* token) {
         return 2;
     }
 
-    int result, op1, op2;
+    int result, operando1, operando2;
 
     switch (token[0]) {
         case '+':
-            result = stackPop(stack) + stackPop(stack);
+            stackPop(stack, &operando2); stackPop(stack, &operando1);
+            result = operando1 + operando2;
             break;
         case '-':
-            int subtractor = stackPop(stack);
-            result = stackPop(stack) - subtractor;
+            stackPop(stack, &operando2); stackPop(stack, &operando1);
+            result = operando1 - operando2;
             break;
         case '*':
-            result = stackPop(stack) * stackPop(stack);
+            stackPop(stack, &operando2); stackPop(stack, &operando1);
+            result = operando1 * operando2;
             break;
         case '/':
-            int divider = stackPop(stack);
-            if (divider == 0) {
-                stackPush(stack, divider); // Coloca de volta na pilha em caso de erro
+            stackPop(stack, &operando2);
+            if (operando2 == 0) {
+                stackPush(stack, operando2); // Coloca de volta na pilha em caso de erro
                 return 4;
             }
-            result = stackPop(stack) / divider;
+            stackPop(stack, &operando1);
+            result = operando1 / operando2;
             break;
         default:
             return 2;  // Operador inválido
@@ -116,8 +121,9 @@ int main() {
     while (1) {
         printf(": ");
 
-        fgets(expression, sizeof(expression), stdin);
+        fgets(expression, EXPRESSION_CAPACITY, stdin);
         char* token = strtok(expression, " \n");
+
         if (strcmp(token, "Q") == 0) {
             break;
         }
@@ -125,7 +131,7 @@ int main() {
         while (token != NULL) {
             switch (evaluateToken(&stack, token)) {
                 case 1: printf("%i\n", stack.inner[stack.len - 1]); break;
-                case 2: printf("%s não é um token válido.\n", token); break;
+                case 2: printf("\"%s\" não é um token válido.\n", token); break;
                 case 3: printf("Não foi possível empilhar \"%s\", e portanto o processo foi interrompido.\n", token); break;
                 case 4: printf("Não é possível dividir por zero.\n"); break;
             }
