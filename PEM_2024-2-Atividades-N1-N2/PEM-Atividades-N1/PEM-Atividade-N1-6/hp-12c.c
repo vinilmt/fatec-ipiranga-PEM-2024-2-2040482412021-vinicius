@@ -7,112 +7,113 @@
  * Autor: Vinicius Leon Melo Tavares                         *
  *-----------------------------------------------------------*/
 
-#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #define STACK_CAPACITY 4
-#define EXPRESSION_CAPACITY 200
+#define INPUT_CAPACITY 200
 
+typedef enum { Ok, Error } Status;
+typedef enum {
+    NumberOk,
+    OperatorOk,
+    InvalidTokenError,
+    StackIsFullError,
+    DivideByZeroError
+} EvaluateTokenStatus;
 typedef struct {
     int inner[STACK_CAPACITY];
     int len;
 } Stack;
 
-// Retorna 0 se suceder, 1 se ultrapassar a capacidade máxima
-int stackPush(Stack* stack, int value) {
+// Retorna Error se a pilha estiver cheia
+Status stackPush(Stack* stack, int value) {
     if (stack->len >= STACK_CAPACITY) {
-        return 1;
+        return Error;
     }
 
     stack->inner[stack->len] = value;
     stack->len++;
 
-    return 0;
+    return Ok;
 }
 
-// Retorna 0 se suceder, 1 se não houver nenhum valor na pilha
-int stackPop(Stack* stack, int* target) {
+// Retorna Error se a pilha estiver vazia
+Status stackPop(Stack* stack, int* target) {
     if (stack->len <= 0) {
-        return 1;
+        return Error;
     }
 
     stack->len--;
     *target = stack->inner[stack->len];
 
-    return 0;
+    return Ok;
 }
 
-// Retorna 0 se suceder e 1 se falhar
-int parseInt(char* s, int* target) {
+// Retorna Error se houver um carácter inválido
+Status parseInt(char* s, int* target) {
     *target = 0;
 
     for (int i = 0; s[i] != '\0'; i++) {
         if (s[i] < '0' || s[i] > '9') {
-            return 1;  // Carácter inválido
+            return Error;
         }
 
         *target = *target * 10 + (s[i] - '0');
     }
 
-    return 0;
+    return Ok;
 }
 
-/*  Retorna 0 se suceder como um número,
-    1 se suceder como um operador,
-    2 se o token for inválido,
-    3 se a pilha já estiver cheia,
-    4 se ocorrer divisão por zero       */
-int evaluateToken(Stack* stack, char* token) {
-
+EvaluateTokenStatus evaluateToken(Stack* stack, char* token) {
     // Verifica se o token é um número e o empurra para a pilha
     int parsedInt;
-    if (parseInt(token, &parsedInt) == 0) {
-        return (stackPush(stack, parsedInt) == 0) ? 0 : 3;
+    if (parseInt(token, &parsedInt) == Ok) {
+        return (stackPush(stack, parsedInt) == Ok) ? NumberOk : StackIsFullError;
     }
 
     // Para ser um operador, o tamanho precisa ser 1
     if (strlen(token) != 1) {
-        return 2;
+        return InvalidTokenError;
     }
 
-    int result, operando1, operando2;
+    int result, value1 = 0, value2 = 0;
 
     switch (token[0]) {
         case '+':
-            stackPop(stack, &operando2); stackPop(stack, &operando1);
-            result = operando1 + operando2;
+            stackPop(stack, &value2); stackPop(stack, &value1);
+            result = value1 + value2;
             break;
         case '-':
-            stackPop(stack, &operando2); stackPop(stack, &operando1);
-            result = operando1 - operando2;
+            stackPop(stack, &value2); stackPop(stack, &value1);
+            result = value1 - value2;
             break;
         case '*':
-            stackPop(stack, &operando2); stackPop(stack, &operando1);
-            result = operando1 * operando2;
+            stackPop(stack, &value2); stackPop(stack, &value1);
+            result = value1 * value2;
             break;
         case '/':
-            stackPop(stack, &operando2);
-            if (operando2 == 0) {
-                stackPush(stack, operando2); // Coloca de volta na pilha em caso de erro
-                return 4;
+            stackPop(stack, &value2);
+            if (value2 == 0) {
+                stackPush(stack, value2); // Coloca de volta na pilha em caso de erro
+                return DivideByZeroError;
             }
-            stackPop(stack, &operando1);
-            result = operando1 / operando2;
+            stackPop(stack, &value1);
+            result = value1 / value2;
             break;
         default:
-            return 2;  // Operador inválido
+            return InvalidTokenError;  // Operador inválido
     }
 
     stackPush(stack, result);
-    return 1;
+    return OperatorOk;
 }
 
 
 int main() {
-    Stack stack;
-    char expression[EXPRESSION_CAPACITY];
+    Stack stack = {0};
+    char input[INPUT_CAPACITY] = {0};
 
     printf("Instruções:\n");
     printf("- Digite a expressão na Notação Polonesa Inversa para obter o resultado desta;\n");
@@ -121,8 +122,13 @@ int main() {
     while (1) {
         printf(": ");
 
-        fgets(expression, EXPRESSION_CAPACITY, stdin);
-        char* token = strtok(expression, " \n");
+        fgets(input, INPUT_CAPACITY, stdin);
+        
+        char* token = strtok(input, " \n");
+
+        if (token == NULL) {
+            continue;
+        }
 
         if (strcmp(token, "Q") == 0) {
             break;
@@ -130,10 +136,11 @@ int main() {
 
         while (token != NULL) {
             switch (evaluateToken(&stack, token)) {
-                case 1: printf("%i\n", stack.inner[stack.len - 1]); break;
-                case 2: printf("\"%s\" não é um token válido.\n", token); break;
-                case 3: printf("Não foi possível empilhar \"%s\", e portanto o processo foi interrompido.\n", token); break;
-                case 4: printf("Não é possível dividir por zero.\n"); break;
+                case NumberOk: break;
+                case OperatorOk: printf("%i\n", stack.inner[stack.len - 1]); break;
+                case InvalidTokenError: printf("\"%s\" não é um token válido.\n", token); break;
+                case StackIsFullError: printf("Não foi possível empilhar \"%s\", e portanto o processo foi interrompido.\n", token); break;
+                case DivideByZeroError: printf("Não é possível dividir por zero.\n"); break;
             }
 
             token = strtok(NULL, " \n");
