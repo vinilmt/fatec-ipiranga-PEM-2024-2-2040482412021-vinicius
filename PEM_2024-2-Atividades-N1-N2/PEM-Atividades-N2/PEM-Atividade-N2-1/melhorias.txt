@@ -1,0 +1,77 @@
+1. Declaração de variáveis em C não representa nenhum custo no programa final, e mesmo que representasse, o compilador é mais esperto que o suficiente para otimizar.
+Logo pode ser mais interessante declarar ao mesmo tempo que inicializa, para facilitar a leitura do código.
+
+Ex:
+void bubbleSort(int numbers[], int length) {    
+    for (int i = 0; i < length - 1; i++) {
+        for (int j = 0; j < length - i - 1; j++) {
+            if (numbers[j] > numbers[j + 1]) {
+                int temp = numbers[j];
+                numbers[j] = numbers[j + 1];
+                numbers[j + 1] = temp;
+            }
+        }
+    }
+}
+
+
+2. Nomes de variáveis mais descritivos, para facilitar a leitura do código.
+
+Ex:
+void bubbleSort(int numbers[], int length) {    
+    for (int i = 0; i < length - 1; i++) {
+        for (int j = 0; j < length - i - 1; j++) {
+            if (numbers[j] > numbers[j + 1]) {
+                int temp = numbers[j];
+                numbers[j] = numbers[j + 1];
+                numbers[j + 1] = temp;
+            }
+        }
+    }
+}
+
+
+3. Impressão do array de números mais embelezada
+
+Ex:
+void printNumbers(int numbers[], int length) {
+    printf("[");
+    
+    if (length > 0) {
+        printf("%d", numbers[0]);
+        
+        for (int i = 1; i < length; i++) {
+            printf(", %d", numbers[i]);        
+        }   
+    }
+    
+    printf("]\n");
+}
+
+
+4. Ao invés do array de números já estar definido no código, o usuário pode inserir os números que deseja.
+
+Ex:
+int main() {
+    int length = -1;
+    
+    while (length < 0) {
+        printf("Insira o tamanho do array: ");
+        scanf("%i", &length);
+
+        if (length < 0) {
+            printf("O tamanho do array não pode ser negativo.\n");
+        }
+    }
+
+    int numbers[length];
+
+    printf("Insira os números do array:\n");
+    for (int i = 0; i < length; i++) {
+        scanf("%i", &numbers[i]);
+    }
+
+    .
+    .
+    .
+}
