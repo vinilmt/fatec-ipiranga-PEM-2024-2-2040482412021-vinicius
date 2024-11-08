@@ -1,3 +1,12 @@
+/*----------------------------------------------------------------------*
+ * Disciplina: Programaçao Estruturada e Modular                        *
+ *          Prof. Carlos Veríssimo                              	    *
+ *----------------------------------------------------------------------*
+ * Objetivo do Programa: Loja de Produtos Eletrônicos com Struct        *
+ * Data - 25/10/2024                                         		    *
+ * Autor: Vinicius Leon Melo Tavares                		            *
+ *----------------------------------------------------------------------*/
+
 #include <stdio.h>
 #include <string.h>
 
