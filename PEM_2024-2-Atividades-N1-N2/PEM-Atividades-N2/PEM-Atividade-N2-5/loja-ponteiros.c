@@ -235,7 +235,7 @@ int main() {
         while (scanf("%i", &option) != 1 || option < 0 || option > 5)    // Validação da opção
             while (getchar() != '\n');
         
-        switch (option) {    // Opções do menu
+        switch (option) {    // Chama as opções do menu
             case 1:
                 insertProduct(&stock);
                 break;
